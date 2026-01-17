@@ -865,6 +865,8 @@ section {
     left: -100%;
     top: 70px;
     flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
     background: var(--crisp-white);
     width: 100%;
     text-align: center;
@@ -879,7 +881,18 @@ section {
   }
 
   .nav-menu li {
-    margin: 1rem 0;
+    margin: 0.5rem 0;
+    width: 100%;
+  }
+
+  .nav-menu li a {
+    display: block;
+    padding: 0.75rem 1rem;
+  }
+
+  /* Override RTL: keep nav items stacked vertically on mobile (row-reverse would force a row) */
+  .app.rtl .nav-menu {
+    flex-direction: column;
   }
 
   .nav-actions {
@@ -980,8 +993,11 @@ section {
   flex-direction: row-reverse;
 }
 
-.app.rtl .nav-menu {
-  flex-direction: row-reverse;
+/* Only apply row-reverse on desktop; mobile uses column (stacked) in both LTR and RTL */
+@media (min-width: 969px) {
+  .app.rtl .nav-menu {
+    flex-direction: row-reverse;
+  }
 }
 
 .app.rtl .nav-menu a::after {
@@ -1001,13 +1017,14 @@ section {
   transform: none;
 }
 
-.app.rtl .process-timeline::before {
-  left: auto;
-  right: 30px;
+/* Keep process layout as LTR: numbers + line on the left, content on the right.
+   Only the text inside step-content is RTL for Arabic. */
+.app.rtl .process-timeline {
+  direction: ltr;
 }
 
 .app.rtl .process-step {
-  flex-direction: row-reverse;
+  flex-direction: row;
 }
 
 .app.rtl .process-step:hover .step-content {
@@ -1072,6 +1089,7 @@ section {
 
 .app.rtl .step-content {
   text-align: right;
+  direction: rtl;
 }
 
 .app.rtl .contact-description {
@@ -1086,10 +1104,6 @@ section {
 @media (max-width: 968px) {
   .app.rtl .nav-container {
     flex-direction: row;
-  }
-
-  .app.rtl .process-timeline::before {
-    right: 20px;
   }
 
   .app.rtl .language-toggle {
